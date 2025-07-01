@@ -9,7 +9,14 @@ def api_root(request, format=None):
     if request.method == 'POST':
         return Response({"message": "POST request received"}, status=status.HTTP_201_CREATED)
 
-    base_url = 'http://localhost:8000/'
+    # Use codespace URL if available, otherwise fallback to localhost
+    codespace_url = 'https://orange-carnival-gg9rggwjr56265g-8000.app.github.dev/'
+    local_url = 'http://localhost:8000/'
+    host = request.get_host()
+    if 'app.github.dev' in host:
+        base_url = codespace_url
+    else:
+        base_url = local_url
     return Response({
         'users': base_url + 'api/users/?format=api',
         'teams': base_url + 'api/teams/?format=api',
